@@ -24,7 +24,7 @@ the site lists and joins your solves against.
 ### 1. Orient yourself in the scan
 Open the PDF with the Read tool. Gardner-style books put all the **problems**
 in one section and the **answers/solutions** in a later section — you want only
-the problems section. Read `pdfinfo raw-book-scans/<collection>.pdf` for the page
+the problems section, though usually I will upload a scan including only the problems anyways. Read `pdfinfo raw-book-scans/<collection>.pdf` for the page
 count; work in page ranges with `scripts/render.py --pages a-b` so you never load
 the whole book at once.
 
