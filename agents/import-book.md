@@ -22,11 +22,22 @@ the site lists and joins your solves against.
 ## Procedure
 
 ### 1. Orient yourself in the scan
-Open the PDF with the Read tool. Gardner-style books put all the **problems**
-in one section and the **answers/solutions** in a later section — you want only
-the problems section, though usually I will upload a scan including only the problems anyways. Read `pdfinfo raw-book-scans/<collection>.pdf` for the page
-count; work in page ranges with `scripts/render.py --pages a-b` so you never load
-the whole book at once.
+**Read the PDF directly** — do **not** render pages to PNG. The Read tool reads
+`raw-book-scans/<collection>.pdf` natively via its `pages` parameter at a
+resolution the harness controls; rendering with `scripts/render.py` first blows
+up the token cost (big 220-DPI PNGs) for no benefit here. `render.py` is for the
+handwritten-solve workflow, **not** book import.
+
+- `pdfinfo raw-book-scans/<collection>.pdf` → page count.
+- `pdftotext -f a -l b raw-book-scans/<collection>.pdf -` → if the scan has a
+  text layer, read **that** instead of the images (near-free). Most scans don't;
+  if it comes back empty, fall back to Read on the PDF.
+- Read the PDF in page-range chunks (the tool caps at 20 pages/request; prefer
+  ~10 at a time) so you never load the whole book into one request.
+
+Gardner-style books put all the **problems** in one section and the
+**answers/solutions** in a later section — you want only the problems section,
+though usually I upload a scan of just the problems anyway.
 
 Read `books/<collection>.yaml` for the title/author/year (attribution).
 
@@ -45,9 +56,10 @@ verbatim:
 - Math → TeX (`$...$` inline, `$$...$$` display), same conventions as
   `transcribe-solve.md`. (Formulas are facts, not expression — restate them
   accurately.)
-- **Figures: describe, never extract.** Do **not** render, crop, or OCR the
-  book's diagrams. In place of each printed figure, write a bracketed
-  description detailed enough for a reader to reconstruct it, e.g.
+- **Figures: describe, never extract.** Read what the figure shows straight from
+  the PDF page; do **not** render, crop, or save it as an image. In place of each
+  printed figure, write a bracketed description detailed enough for a reader to
+  reconstruct it, e.g.
   `[Figure: a 3×3 grid of dots; the top-left and bottom-right dots are circled.]`
   If a diagram is essential and your description can't fully carry it, say so and
   point the reader to the original (linked in the README sources). Puzzle folders
