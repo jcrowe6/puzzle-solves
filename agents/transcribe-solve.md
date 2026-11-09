@@ -35,9 +35,11 @@ Write faithful Markdown of the written solution. Rules:
 - **Multi-letter subscripts use `\text{}`** for KaTeX readability, e.g.
   `A_{\text{star}}` not `A_{star}`.
 - Keep the author's paragraph breaks. Lists → Markdown lists.
-- **Multi-page solves:** mark a break between pages with a `---` horizontal rule
-  where the author's flow crosses pages (e.g. "I show this derivation on the next
-  page"). Don't add rules mid-page.
+- **Multi-page solves:** only add a `---` horizontal rule between pages if the
+  author's own text explicitly signals the page break (e.g. "I show this
+  derivation on the next page" or "continued on the next page"). If the text
+  says nothing about it, don't add a rule — just let the content flow
+  continuously, even across a page boundary.
 - Do **not** include the title/attribution/problem statement here — those live on
   the puzzle entry. The solve is only the solution.
 
