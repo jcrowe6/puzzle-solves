@@ -1,0 +1,27 @@
+name: Notify site
+
+# When published content changes on main, ask my-site-sst to rebuild & redeploy.
+# Requires secret SITE_DISPATCH_TOKEN: a fine-grained PAT scoped to
+# jcrowe6/my-site-sst with "Contents: Read and write".
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'puzzles/**'
+      - 'solves/**'
+      - 'books/**'
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger my-site-sst deploy
+        env:
+          GH_TOKEN: ${{ secrets.SITE_DISPATCH_TOKEN }}
+        run: |
+          gh api repos/jcrowe6/my-site-sst/dispatches \
+            -f event_type=content-updated \
+            -f "client_payload[source]=${{ github.repository }}" \
+            -f "client_payload[sha]=${{ github.sha }}"
