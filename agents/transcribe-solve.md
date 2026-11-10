@@ -32,6 +32,9 @@ Write faithful Markdown of the written solution. Rules:
   `$$...$$` on their own line. Transcribe every formula, fraction, subscript,
   set symbol (`\mathbb{N}`), etc. faithfully. Example from `mbmalp/1`:
   `$$r = 1 + \frac{1}{2c\pi}$$` and inline `for $c \in \mathbb{N}$`.
+- **Blank line around every `$$...$$` line.** Consecutive display-math lines
+  (e.g. a chain of `= ...` steps) are separated by one fully blank line, and a
+  display line is also separated from adjacent prose by a blank line.
 - **Multi-letter subscripts use `\text{}`** for KaTeX readability, e.g.
   `A_{\text{star}}` not `A_{star}`.
 - Keep the author's paragraph breaks. Lists → Markdown lists.
