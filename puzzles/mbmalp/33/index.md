@@ -1,7 +1,7 @@
 ---
 collection: mbmalp
 problem: 33
-title: "How Long Is a "Lunar"?"
+title: 'How Long Is a "Lunar"?'
 ---
 
 In H. G. Wells's novel *The First Men in the Moon*, imagine the insect-like

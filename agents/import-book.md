@@ -97,6 +97,28 @@ title: "<puzzle name>"
 ```
 Then the problem statement body (with math / figures).
 
+> ⚠️ **These files are parsed by Astro as content-collection entries.** A
+> malformed frontmatter block or a schema mismatch **breaks the site deploy**
+> (this has happened). Keep it valid:
+> - **Quote titles carefully.** If the title contains double quotes, wrap it in
+>   **single quotes**: `title: 'How Long Is a "Lunar"?'`. If it contains both,
+>   double the single quote inside single quotes (`'Don''t "Stop"'`). A title with
+>   only an apostrophe is fine in double quotes (`"Don't Mate in One"`). Never nest
+>   unescaped double quotes inside a double-quoted string. Also quote any title
+>   containing `:`, `#`, or a leading `*`, `&`, `[`, `{`, `!`, `%`, `@`.
+> - Frontmatter must satisfy the schema in the site repo
+>   (`my-site-sst/src/content.config.ts`): `collection` (string), `problem`
+>   (a bare integer, unquoted), `title` (a non-empty string), and optionally
+>   `source_title` / `source_author`. Don't add other keys or leave `title` empty.
+>   The loader only picks up files named exactly `index.md`.
+> - The frontmatter must open and close with `---` on their own lines, at the very
+>   top of the file (no blank line or BOM before it).
+> - The body is plain Markdown (GFM + math), **not** MDX, but keep it conservative:
+>   no raw HTML, balanced `$` signs and code fences, and literal `<` / `>` / `$`
+>   in prose written as TeX (`$a < b$`) or inside backticks.
+> - After writing, sanity-check that every file parses, e.g.
+>   `python3 -c "import yaml,glob;[yaml.safe_load(open(f).read().split('---')[1]) for f in glob.glob('puzzles/<collection>/*/index.md')]"`.
+
 ### 4. Verify
 - Numbers are contiguous and match the book (flag any you skipped).
 - **No verbatim copying:** each statement reads in your own words, not the
