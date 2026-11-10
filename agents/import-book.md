@@ -32,8 +32,25 @@ handwritten-solve workflow, **not** book import.
 - `pdftotext -f a -l b raw-book-scans/<collection>.pdf -` → if the scan has a
   text layer, read **that** instead of the images (near-free). Most scans don't;
   if it comes back empty, fall back to Read on the PDF.
-- Read the PDF in page-range chunks (the tool caps at 20 pages/request; prefer
+- Read the PDF in small chunks (the tool caps at 20 pages/request; prefer
   ~10 at a time) so you never load the whole book into one request.
+- **Known bug: `Read` with the `pages` parameter fails on these scans.** It
+  errors with "PDF is password-protected" even though the file is **not**
+  encrypted (`pdfinfo` reports `Encrypted: no`). Do not treat this as a real
+  password problem, and do not try to crack, strip, render, or OCR the file.
+  Instead, **slice the PDF into smaller PDFs and `Read` those without the
+  `pages` parameter**:
+  ```bash
+  # one single-page PDF per page (poppler's pdfseparate; qpdf may not be installed)
+  mkdir -p "$SCRATCH/slice"
+  pdfseparate -f 5 -l 7 raw-book-scans/<collection>.pdf "$SCRATCH/slice/p%d.pdf"
+  # then Read $SCRATCH/slice/p5.pdf, p6.pdf, ... with no `pages` argument
+  ```
+  (`pdfunite` can join pages back into a multi-page chunk if you want one.)
+  Write slices to your scratchpad/temp dir, **never** into the repo, and don't
+  commit them. A puzzle often straddles a page break, so read the neighboring
+  page too. Page numbers in the PDF file are not the book's printed page
+  numbers, so check the header on each page to confirm which problems it holds.
 
 Gardner-style books put all the **problems** in one section and the
 **answers/solutions** in a later section — you want only the problems section,
@@ -61,6 +78,7 @@ verbatim:
   printed figure, write a bracketed description detailed enough for a reader to
   reconstruct it, e.g.
   `[Figure: a 3×3 grid of dots; the top-left and bottom-right dots are circled.]`
+  TeX formatting is available, if it helps to create some kind of visual reference
   If a diagram is essential and your description can't fully carry it, say so and
   point the reader to the original (linked in the README sources). Puzzle folders
   must contain **no `fig-*.png`**.
